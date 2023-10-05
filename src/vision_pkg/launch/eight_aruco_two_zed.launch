@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- Camera Names -->
+    <arg name="camera_name_1" default="zed2i_long" />
+    <arg name="camera_name_2" default="zed2i_short" />
+
+    <!-- ArUco Marker Defaults -->
+    <arg name="markerSize" default="0.048"/>  <!-- in m -->
+
+    <!-- Define all 8 marker IDs -->
+    <arg name="marker1Id" default="960"/> <!-- cuttingboard -->
+    <arg name="marker2Id" default="625"/> <!-- knife -->
+    <arg name="marker3Id" default="3"/> <!-- pan -->
+    <arg name="marker4Id" default="16"/> <!-- spoon -->
+    <arg name="marker5Id" default="25"/> <!-- flakes -->
+    <arg name="marker6Id" default="18"/> <!-- bowl -->
+    <arg name="marker7Id" default="333"/> <!-- ? -->
+    <arg name="marker8Id" default="444"/> <!-- ? -->
+
+    <!-- Other Parameters -->
+    <arg name="dct_normalization" default="False" />
+    <arg name="dct_filter_size"   default="2" />
+
+    <!-- Define all 8 marker frames for the long camera -->
+    <arg name="marker1_frame_long" default="aruco_frame_long1" />
+    <arg name="marker2_frame_long" default="aruco_frame_long2" />
+    <arg name="marker3_frame_long" default="aruco_frame_long3" />
+    <arg name="marker4_frame_long" default="aruco_frame_long4" />
+    <arg name="marker5_frame_long" default="aruco_frame_long5" />
+    <arg name="marker6_frame_long" default="aruco_frame_long6" />
+    <arg name="marker7_frame_long" default="aruco_frame_long7" />
+    <arg name="marker8_frame_long" default="aruco_frame_long8" />
+
+    <!-- Define all 8 marker frames for the short camera -->
+    <arg name="marker1_frame_short" default="aruco_frame_short1" />
+    <arg name="marker2_frame_short" default="aruco_frame_short2" />
+    <arg name="marker3_frame_short" default="aruco_frame_short3" />
+    <arg name="marker4_frame_short" default="aruco_frame_short4" />
+    <arg name="marker5_frame_short" default="aruco_frame_short5" />
+    <arg name="marker6_frame_short" default="aruco_frame_short6" />
+    <arg name="marker7_frame_short" default="aruco_frame_short7" />
+    <arg name="marker8_frame_short" default="aruco_frame_short8" />
+
+    <!-- RVIZ Configuration -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find vision_pkg)/rviz/zed_aruco_multicam.rviz" output="screen"/>
+
+    <node name="pcl_bagpublisher" pkg="vision_pkg" type="pcl_bagpublisher" output="screen"/>
+
+
+    <include file="$(find vision_pkg)/launch/multi_zed_merge.launch">
+        <!-- Camera 1 Configuration -->
+        <arg name="camera_name_1" value="$(arg camera_name_1)" />
+        <arg name="camera_sn_1"   default="34226204" /> 
+        <!-- Base frame -->
+        <arg name="base_frame_1"            default="world" />
+        <!-- Position and Orientation respect to base frame -->
+        <arg name="cam_pos_x_1"             default="-0.29501915" />
+        <arg name="cam_pos_y_1"             default="0.52443869" />
+        <arg name="cam_pos_z_1"             default="0.62268815" />
+        <arg name="cam_roll_1"              default="-0.017910943763640958" />
+        <arg name="cam_pitch_1"             default="0.9265185349594702" />
+        <arg name="cam_yaw_1"               default="-0.2874361599828621" /> <!-- Looking forward -->
+
+        <!-- Camera 2 Configuration -->
+        <arg name="camera_name_2" value="$(arg camera_name_2)" />
+        <arg name="camera_sn_2" default="34783283" />
+        <arg name="base_frame_2" default="world" />
+        <arg name="cam_pos_x_2" default="0.23444434" />
+        <arg name="cam_pos_y_2" default="-0.61746859" />
+        <arg name="cam_pos_z_2" default="0.55138247" />
+        <arg name="cam_roll_2"  default="0.08457018450026065" />
+        <arg name="cam_pitch_2" default="0.9300685715905161" />
+        <arg name="cam_yaw_2"   default="1.4538632728321088" />
+    </include>
+
+    <!-- Camera 1 ArUco Configuration -->
+    <group ns="$(arg camera_name_1)">
+        <node pkg="aruco_ros" type="octuple" name="aruco_octuple">    
+            <!-- Remappings and Parameters for Camera 1 -->
+            <remap from="/camera_info" to="/zed_multi/zed2i_long/zed_nodelet_front/left/camera_info" />
+            <remap from="/image" to="/zed_multi/zed2i_long/zed_nodelet_front/left/image_rect_color" />
+            <param name="image_is_rectified" value="True"/>
+            <param name="marker_size" value="$(arg markerSize)"/>
+            <param name="marker_id1" value="$(arg marker1Id)"/>
+            <param name="marker_id2" value="$(arg marker2Id)"/>
+            <param name="marker_id3" value="$(arg marker3Id)"/>
+            <param name="marker_id4" value="$(arg marker4Id)"/>
+            <param name="marker_id5" value="$(arg marker5Id)"/>
+            <param name="marker_id6" value="$(arg marker6Id)"/>
+            <param name="marker_id7" value="$(arg marker7Id)"/>
+            <param name="marker_id8" value="$(arg marker8Id)"/>
+            <param name="normalizeImage" value="$(arg dct_normalization)"/>
+            <param name="dct_components_to_remove" value="$(arg dct_filter_size)"/>
+            <param name="parent_name" value="zed2i_long_left_camera_optical_frame"/>
+            <param name="child_name1" value="$(arg marker1_frame_long)" />
+            <param name="child_name2" value="$(arg marker2_frame_long)" />
+            <param name="child_name3" value="$(arg marker3_frame_long)" />
+            <param name="child_name4" value="$(arg marker4_frame_long)" />
+            <param name="child_name5" value="$(arg marker5_frame_long)" />
+            <param name="child_name6" value="$(arg marker6_frame_long)" />
+            <param name="child_name7" value="$(arg marker7_frame_long)" />
+            <param name="child_name8" value="$(arg marker8_frame_long)" />
+        </node>
+    </group>
+
+    <!-- Camera 2 ArUco Configuration -->
+    <group ns="$(arg camera_name_2)">
+        <node pkg="aruco_ros" type="octuple" name="aruco_octuple">    
+            <!-- Remappings and Parameters for Camera 2 -->
+            <remap from="/camera_info" to="/zed_multi/zed2i_short/zed_nodelet_rear/left/camera_info"/>
+            <remap from="/image" to="/zed_multi/zed2i_short/zed_nodelet_rear/left/image_rect_color" />
+            <param name="image_is_rectified" value="True"/>
+            <param name="marker_size" value="$(arg markerSize)"/>
+            <param name="marker_id1" value="$(arg marker1Id)"/>
+            <param name="marker_id2" value="$(arg marker2Id)"/>
+            <param name="marker_id3" value="$(arg marker3Id)"/>
+            <param name="marker_id4" value="$(arg marker4Id)"/>
+            <param name="marker_id5" value="$(arg marker5Id)"/>
+            <param name="marker_id6" value="$(arg marker6Id)"/>
+            <param name="marker_id7" value="$(arg marker7Id)"/>
+            <param name="marker_id8" value="$(arg marker8Id)"/>
+            <param name="normalizeImage" value="$(arg dct_normalization)"/>
+            <param name="dct_components_to_remove" value="$(arg dct_filter_size)"/>
+            <param name="parent_name" value="zed2i_short_left_camera_optical_frame"/>
+            <param name="child_name1" value="$(arg marker1_frame_short)" />
+            <param name="child_name2" value="$(arg marker2_frame_short)" />
+            <param name="child_name3" value="$(arg marker3_frame_short)" />
+            <param name="child_name4" value="$(arg marker4_frame_short)" />
+            <param name="child_name5" value="$(arg marker5_frame_short)" />
+            <param name="child_name6" value="$(arg marker6_frame_short)" />
+            <param name="child_name7" value="$(arg marker7_frame_short)" />
+            <param name="child_name8" value="$(arg marker8_frame_short)" />
+        </node>
+    </group>
+</launch>

@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/sopho/catkin_ws/install/setup.sh

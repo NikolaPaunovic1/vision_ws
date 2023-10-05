@@ -1,0 +1,8 @@
+prefix=/home/sopho/catkin_ws/devel
+
+Name: vision_package_zed
+Description: Description of vision_package_zed
+Version: 0.0.0
+Cflags: -I/usr/include/eigen3
+Libs: -L${prefix}/lib 
+Requires: tf2_geometry_msgs message_filters

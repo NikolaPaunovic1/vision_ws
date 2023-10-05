@@ -1,0 +1,8 @@
+prefix=/home/sopho/catkin_ws/install
+
+Name: actionlib_tutorials2
+Description: Description of actionlib_tutorials2
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: actionlib_msgs roscpp std_msgs actionlib

@@ -1,0 +1,8 @@
+prefix=/home/sopho/catkin_ws/devel
+
+Name: zed_vision
+Description: Description of zed_vision
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
